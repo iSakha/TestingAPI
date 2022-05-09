@@ -3,6 +3,7 @@ let eventLocations = {};
 let events = {};
 let selectedEventId;
 let departments = {};
+let equipByCat = {};
 
 console.log({ "login": "john_doe", "pass": "1234" });
 console.log({ "login": "test_admin", "pass": "4321" });
@@ -41,6 +42,8 @@ function showHideDiv(nav) {
     document.getElementById('reservation-div').classList.add('d-none');
     document.getElementById('transfer-div').classList.add('d-none');
     document.getElementById('transfer-header').classList.add('d-none');
+    document.getElementById('btn-trans-move').classList.add('d-none');
+    document.getElementById('tbl-trans-equip').classList.add('d-none');
 
     switch (nav.id) {
         case 'nav-login':
@@ -59,6 +62,8 @@ function showHideDiv(nav) {
         case 'nav-transfer':
             document.getElementById('transfer-div').classList.remove('d-none');
             document.getElementById('transfer-header').classList.remove('d-none');
+            document.getElementById('btn-trans-move').classList.remove('d-none');
+            document.getElementById('tbl-trans-equip').classList.remove('d-none');
             break;
     }
 }
@@ -1032,8 +1037,8 @@ document.getElementById("select-trans-cat").addEventListener('change', (e) => {
     })
         .then(res => res.json())
         .then(data => {
-            // console.log("equipment by category: ", data);
-            loadTransferEquipTable(data);
+            equipByCat = data;
+            loadTransferEquipTable(equipByCat);
         })
         .catch(error => {
             // enter your logic for when there is an error (ex. error toast)
@@ -1048,50 +1053,42 @@ document.getElementById("select-trans-cat").addEventListener('change', (e) => {
 function loadTransferEquipTable(data) {
 
     console.log("equipment by category: ", data);
-    let whouses = ["Минск", "Москва", "Казань", "Питер"];
-    let colScopes = [];
+
+    let transferColumns = [];
 
     let warehouseFromSelect = document.getElementById("select-trans-from");
     let warehouseToSelect = document.getElementById("select-trans-to");
-    // let warehouseToSelect = getElementById("whouse-to");
     let warehouseFrom = warehouseFromSelect.options[warehouseFromSelect.selectedIndex].text;
-    let warehouseFromID = warehouseFromSelect.options[warehouseFromSelect.selectedIndex].value;
     let warehouseTo = warehouseFromSelect.options[warehouseToSelect.selectedIndex].text;
-    let warehouseToID = warehouseFromSelect.options[warehouseToSelect.selectedIndex].value;
-
-    // console.log("warehouseFrom:", warehouseFrom);
-    // console.log("warehouseFromID:", warehouseFromID);
-    // console.log("warehouseTo:", warehouseTo);
-    // console.log("warehouseToID:", warehouseToID);
 
 
     switch (warehouseFrom) {
         case "Минск":
-            colScopes.push('qty_minsk');
+            transferColumns.push('qty_minsk');
             break;
         case "Москва":
-            colScopes.push('qty_msc');
+            transferColumns.push('qty_msc');
             break;
         case "Казань":
-            colScopes.push('qty_kazan');
+            transferColumns.push('qty_kazan');
             break;
         case "Питер":
-            colScopes.push('qty_piter');
+            transferColumns.push('qty_piter');
             break;
     }
 
     switch (warehouseTo) {
         case "Минск":
-            colScopes.push('qty_minsk');
+            transferColumns.push('qty_minsk');
             break;
         case "Москва":
-            colScopes.push('qty_msc');
+            transferColumns.push('qty_msc');
             break;
         case "Казань":
-            colScopes.push('qty_kazan');
+            transferColumns.push('qty_kazan');
             break;
         case "Питер":
-            colScopes.push('qty_piter');
+            transferColumns.push('qty_piter');
             break;
     }
 
@@ -1117,12 +1114,12 @@ function loadTransferEquipTable(data) {
 
     tHead = document.createElement('th');
     tHead.innerHTML = "Откуда: " + warehouseFrom;
-    tHead.scope = colScopes[0];
+    tHead.col = transferColumns[0];
     tRow.appendChild(tHead);
 
     tHead = document.createElement('th');
     tHead.innerHTML = "Куда: " + warehouseTo;
-    tHead.scope = colScopes[1];
+    tHead.col = transferColumns[1];
     tRow.appendChild(tHead);
 
     tHead = document.createElement('th');
@@ -1171,7 +1168,7 @@ function loadTransferEquipTable(data) {
             for (let i = 0; i < 4; i++) {
                 // console.log(arrDataRow[i+3][0]);
 
-                if (arrDataRow[i + 3][0] === colScopes[0]) {
+                if (arrDataRow[i + 3][0] === transferColumns[0]) {
                     tCell.innerHTML = arrDataRow[i + 3][1];
                     tRow.appendChild(tCell);
                 }
@@ -1180,7 +1177,7 @@ function loadTransferEquipTable(data) {
             tCell = document.createElement('td');
 
             for (let i = 0; i < 4; i++) {
-                if (arrDataRow[i + 3][0] === colScopes[1]) {
+                if (arrDataRow[i + 3][0] === transferColumns[1]) {
                     tCell.innerHTML = arrDataRow[i + 3][1];
                     tRow.appendChild(tCell);
                 }
@@ -1242,18 +1239,19 @@ document.getElementById('tbl-trans-equip').addEventListener('click', (e) => {
     }
 })
 
+//  Save transferring data to DB
+// ======================================================================
+
 document.getElementById('btn-trans-move').addEventListener('click', saveTransferData);
 
 function saveTransferData() {
     let transDataArr = [];
-    
+
     let tbl = document.getElementById('tbl-trans-equip');
     let thead = tbl.children[0];
     let tr = thead.children[0];
     let whouseNameFrom = tr.children[3].innerHTML.slice(8, 16);
     let whouseNameTo = tr.children[4].innerHTML.slice(6, 16);
-
-    let tbody = tbl.children[1];
 
     let qty_from;
     let qty_to;
@@ -1269,12 +1267,29 @@ function saveTransferData() {
         qty_to = parseInt(tbl.rows[i].children[4].innerHTML);
         qty_transfer = tbl.rows[i].children[5].children[0].value;
 
-
-
         if (qty_transfer > 0) {
 
             let transData = {};
-            transData.id = id;
+
+            id = id + "-000";
+            let equip = equipByCat.filter((p) => {
+                return p.fixture_type == id;
+            });
+
+            transData.fixture_type = id;
+            transData.qty_minsk = equip[0].qty_minsk;
+            transData.qty_msc = equip[0].qty_msc;
+            transData.qty_kazan = equip[0].qty_kazan;
+            transData.qty_piter = equip[0].qty_piter;
+
+            // console.log("equip: ", equip);
+            // console.log('transData.qty_minsk', transData.qty_minsk);
+            // console.log('transData.qty_msc', transData.qty_msc);
+            // console.log('transData.qty_kazan', transData.qty_kazan);
+            // console.log('transData.qty_piter', transData.qty_piter);
+
+            // console.log("transData before:", transData);
+
             switch (whouseNameFrom) {
                 case "Минск":
                     transData.qty_minsk = qty_from;
@@ -1336,15 +1351,33 @@ function saveTransferData() {
 
             }
 
-            console.log("transData:",transData);
+            // console.log("transData after:", transData);
 
             transDataArr.push(transData);
         }
 
     }
-    console.log("transDataArr:",transDataArr);
+    console.log("transDataArr:", transDataArr);
 
+    let data = JSON.stringify(transDataArr);
 
+    console.log("POST send transferring equipment: http://82.209.203.205:3070/equip/transfer");
+    fetch('http://82.209.203.205:3070/equip/transfer', {
+
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: data
+    })
+        .then(res => res.json())
+        .then(data => {
+            console.log("response: ", data);
+        })
+        .catch(error => {
+            // enter your logic for when there is an error (ex. error toast)
+            console.log(error);
+        })
 }
 
 
