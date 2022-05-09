@@ -1,0 +1,30 @@
+.login-form {
+    width: 30%;
+}
+
+.event-side,
+.event-main {
+    padding: 20px;
+}
+
+.event-main {
+    font-weight: bold;
+}
+
+.space {
+    width: 30px;
+}
+
+.txt-to-move {
+    font-weight: bold;
+    text-align: center;
+    background-color: rgb(241, 243, 248);
+}
+
+.yellow {
+    background-color: yellow;
+}
+
+.bold-font {
+    font-weight: bold;
+}
