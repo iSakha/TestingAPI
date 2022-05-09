@@ -1246,8 +1246,7 @@ document.getElementById('btn-trans-move').addEventListener('click', saveTransfer
 
 function saveTransferData() {
     let transDataArr = [];
-    let transData = {};
-
+    
     let tbl = document.getElementById('tbl-trans-equip');
     let thead = tbl.children[0];
     let tr = thead.children[0];
@@ -1263,15 +1262,7 @@ function saveTransferData() {
 
     // console.log(tbl.rows[2].children[1]);
 
-
-
     for (let i = 2; i < tbl.rows.length; i++) {
-
-        transData.qty_minsk = 0;
-        transData.qty_msc = 0;
-        transData.qty_kazan = 0;
-        transData.qty_piter = 0;
-
 
         id = tbl.rows[i].children[0].innerHTML;
         qty_from = parseInt(tbl.rows[i].children[3].innerHTML);
@@ -1282,6 +1273,8 @@ function saveTransferData() {
 
         if (qty_transfer > 0) {
 
+            let transData = {};
+            transData.id = id;
             switch (whouseNameFrom) {
                 case "Минск":
                     transData.qty_minsk = qty_from;
