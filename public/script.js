@@ -1,3 +1,7 @@
+const HOST = 'http://127.0.0.1';
+// const HOST = 'http://82.209.203.205';
+const PORT = 3070;
+const URL = HOST + ':' + PORT;
 let USER;
 let eventLocations = {};
 let events = {};
@@ -88,7 +92,7 @@ document.getElementById('btn-login').addEventListener('click', (e) => {
         USER = data.user_name;
     } else USER = user_name;
 
-    fetch('http://82.209.203.205:3070/login', {
+    fetch(URL + '/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -157,7 +161,7 @@ function loadCities() {
     let selectFrom = document.getElementById('select-trans-from');
     let selectTo = document.getElementById('select-trans-to');
 
-    fetch('http://82.209.203.205:3070/cities', {
+    fetch(URL + '/cities', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -184,7 +188,7 @@ function loadStatus() {
     console.log("GET event status: http://82.209.203.205:3070/status");
 
     let selectStatus = document.getElementById('select-status');
-    fetch('http://82.209.203.205:3070/status', {
+    fetch(URL + '/status', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -211,7 +215,7 @@ function loadManager() {
     let selectManager1 = document.getElementById('select-manager-1');
     let selectManager2 = document.getElementById('select-manager-2');
 
-    fetch('http://82.209.203.205:3070/managers', {
+    fetch(URL + '/managers', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -238,7 +242,7 @@ function loadLocations() {
 
     let selectEventCity = document.getElementById('select-event-city');
 
-    fetch('http://82.209.203.205:3070/locations', {
+    fetch(URL + '/locations', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -271,7 +275,7 @@ function loadEventPhases() {
 
     let selectEventPhase = document.getElementById('select-event-phase');
 
-    fetch('http://82.209.203.205:3070/phases', {
+    fetch(URL + '/phases', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -335,7 +339,7 @@ document.getElementById('select-trans-dep').addEventListener('change', (e) => {
     let dep = e.target.options[e.target.selectedIndex].value;
     console.log("dep:", dep);
 
-    fetch('http://82.209.203.205:3070/equip/cat/' + dep, {
+    fetch(URL + '/equip/cat/' + dep, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -427,7 +431,7 @@ function sendDataToDB() {
 
     console.log("newEvent:", newEvent);
 
-    fetch('http://82.209.203.205:3070/events', {
+    fetch(URL + '/events', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -454,7 +458,7 @@ function getAllEvents() {
     document.getElementById('event-tbl-div').classList.remove('d-none');
     document.getElementById('event-sum-div').classList.remove('d-none');
 
-    fetch('http://82.209.203.205:3070/events', {
+    fetch(URL + '/events', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -528,7 +532,7 @@ function loadEventsTable(data) {
 //  GET summary
 // ======================================================================
 function getSummary() {
-    fetch('http://82.209.203.205:3070/events/summary', {
+    fetch(URL + '/events/summary', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -640,7 +644,7 @@ function updateEvent() {
 
     console.log("updEvent:", updEvent);
 
-    fetch('http://82.209.203.205:3070/events/' + selectedEventId, {
+    fetch(URL + '/events/' + selectedEventId, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -663,7 +667,7 @@ document.getElementById('btn-delete-event').addEventListener('click', deleteEven
 
 function deleteEvent() {
 
-    fetch('http://82.209.203.205:3070/events/' + selectedEventId, {
+    fetch(URL + '/events/' + selectedEventId, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -691,7 +695,7 @@ function getAllDepartments() {
     console.log("GET all departments:http://82.209.203.205:3070/equip/dep");
     selectDepartment = document.getElementById('select-trans-dep');
     console.log(selectDepartment);
-    fetch('http://82.209.203.205:3070/equip/dep', {
+    fetch(URL + '/equip/dep', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -718,7 +722,7 @@ function getAllEquip() {
     console.log("GET all equipment:http://82.209.203.205:3070/equip");
     document.getElementById('tbl-equip').classList.remove('d-none');
 
-    fetch('http://82.209.203.205:3070/equip', {
+    fetch(URL + '/equip', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -744,7 +748,7 @@ function getLightEquip() {
     console.log("GET light equipment:http://82.209.203.205:3070/equip/001");
     document.getElementById('tbl-equip').classList.remove('d-none');
 
-    fetch('http://82.209.203.205:3070/equip/001', {
+    fetch(URL + '/equip/001', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -767,7 +771,7 @@ document.getElementById('equip-light-000').addEventListener('click', (e) => {
     console.log(e.target.id.slice(-3));
     let cat = e.target.id.slice(-3);
     console.log("GET lighting by category: http://82.209.203.205:3070/equip/001/" + cat);
-    fetch('http://82.209.203.205:3070/equip/001/' + cat, {
+    fetch(URL + '/equip/001/' + cat, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -795,7 +799,7 @@ function getVideoEquip() {
     console.log("GET video equipment:http://82.209.203.205:3070/equip/dep");
     document.getElementById('tbl-equip').classList.remove('d-none');
 
-    fetch('http://82.209.203.205:3070/equip/002', {
+    fetch(URL + '/equip/002', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -818,7 +822,7 @@ document.getElementById('equip-video-000').addEventListener('click', (e) => {
     console.log(e.target.id.slice(-3));
     let cat = e.target.id.slice(-3);
     console.log("GET video by category: http://82.209.203.205:3070/equip/002/" + cat);
-    fetch('http://82.209.203.205:3070/equip/002/' + cat, {
+    fetch(URL + '/equip/002/' + cat, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -846,7 +850,7 @@ function getCommEquip() {
     console.log("GET commutation equipment:http://82.209.203.205:3070/equip/dep");
     document.getElementById('tbl-equip').classList.remove('d-none');
 
-    fetch('http://82.209.203.205:3070/equip/003', {
+    fetch(URL + '/equip/003', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -869,7 +873,7 @@ document.getElementById('equip-comm-000').addEventListener('click', (e) => {
     console.log(e.target.id.slice(-3));
     let cat = e.target.id.slice(-3);
     console.log("GET commutation by category: http://82.209.203.205:3070/equip/003/" + cat);
-    fetch('http://82.209.203.205:3070/equip/003/' + cat, {
+    fetch(URL + '/equip/003/' + cat, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -896,7 +900,7 @@ function getRigEquip() {
     console.log("GET rigging equipment:http://82.209.203.205:3070/equip/dep");
     document.getElementById('tbl-equip').classList.remove('d-none');
 
-    fetch('http://82.209.203.205:3070/equip/004', {
+    fetch(URL + '/equip/004', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -919,7 +923,7 @@ document.getElementById('equip-rig-000').addEventListener('click', (e) => {
     console.log(e.target.id.slice(-3));
     let cat = e.target.id.slice(-3);
     console.log("GET rigging by category: http://82.209.203.205:3070/equip/004/" + cat);
-    fetch('http://82.209.203.205:3070/equip/004/' + cat, {
+    fetch(URL + '/equip/004/' + cat, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -1029,7 +1033,7 @@ document.getElementById("select-trans-cat").addEventListener('change', (e) => {
     cat = id.slice(4, 7);
     let dep = id.slice(0, 3);
 
-    fetch('http://82.209.203.205:3070/equip/' + dep + '/' + cat, {
+    fetch(URL + '/equip/' + dep + '/' + cat, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -1362,7 +1366,7 @@ function saveTransferData() {
     let data = JSON.stringify(transDataArr);
 
     console.log("POST send transferring equipment: http://82.209.203.205:3070/equip/transfer");
-    fetch('http://82.209.203.205:3070/equip/transfer', {
+    fetch(URL + '/equip/transfer', {
 
         method: 'PATCH',
         headers: {
