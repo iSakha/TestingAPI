@@ -633,14 +633,14 @@ function updateEvent() {
     updEvent.current_user = document.getElementById('txt-event-user').value;
     updEvent.start = document.getElementById('date-event-start').value;
     updEvent.end = document.getElementById('date-event-end').value;
-    updEvent.city = parseInt(document.getElementById('select-city').value);
+    updEvent.warehouseId = parseInt(document.getElementById('select-city').value);
     updEvent.status = parseInt(document.getElementById('select-status').value);
     updEvent.manager_1 = parseInt(document.getElementById('select-manager-1').value);
     updEvent.manager_2 = parseInt(document.getElementById('select-manager-2').value);
     updEvent.location_city = parseInt(document.getElementById('select-event-city').value);
     updEvent.location_place = parseInt(document.getElementById('select-event-place').value);
     console.log("location_place:", document.getElementById('select-event-place').value);
-    updEvent.phase = parseInt(document.getElementById('select-event-phase').value);
+    updEvent.client = parseInt(document.getElementById('select-event-client').value);
     updEvent.notes = document.getElementById('event-notes').value;
 
     console.log("updEvent:", updEvent);
