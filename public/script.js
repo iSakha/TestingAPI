@@ -37,6 +37,7 @@ document.getElementById('nav-transfer').addEventListener('click', (e) => {
 });
 
 function showHideDiv(nav) {
+
     document.getElementById('login-div').classList.add('d-none');
     document.getElementById('event-div').classList.add('d-none');
     document.getElementById('event-sum-div').classList.add('d-none');
@@ -135,24 +136,34 @@ function showNewEventForm() {
     document.getElementById('txt-event-user').disabled = true;
     // document.getElementById('frm-new-event').reset();    ???
     resetEventForm();
+
+    initialize();
 }
 function resetEventForm() {
+
     document.getElementById('txt-event-title').value = "";
     document.getElementById('txt-event-user').value = USER;
-    document.getElementById('date-event-start').value = "";
-    document.getElementById('date-event-end').value = "";
+    document.getElementById('date-event-start').valueAsDate = new Date();
+    document.getElementById('date-event-end').valueAsDate = new Date();
     document.getElementById('select-city').selectedIndex = 0;
     document.getElementById('select-status').selectedIndex = 0;
-    document.getElementById('select-manager-1').selectedIndex = -1;
-    document.getElementById('select-manager-2').selectedIndex = -1;
-    document.getElementById('select-event-city').selectedIndex = -1;
-    document.getElementById('select-event-place').selectedIndex = -1;
-    document.getElementById('select-event-client').selectedIndex = -1;
+    document.getElementById('select-manager-1').selectedIndex = 0;
+    document.getElementById('select-manager-2').selectedIndex = 0;
+    document.getElementById('select-event-city').selectedIndex = 0;
+    document.getElementById('select-event-place').selectedIndex = 0;
+    document.getElementById('select-event-client').selectedIndex = 0;
     document.getElementById('event-notes').value = "";
 }
 
+// Change date 
+//====================================================================
+
+document.getElementById('date-event-start').addEventListener('change', () => {
+    document.getElementById('date-event-end').value = document.getElementById('date-event-start').value;
+})
+
 // GET Cities (Calendars/warehouses) as a data source for select input 
-//============================================================
+//====================================================================
 function loadCities() {
 
     console.log("GET cities: http://82.209.203.205:3070/cities");
@@ -400,7 +411,7 @@ function loadSelectSource(data, select) {
 document.getElementById('btn-save-new-event').addEventListener('click', sendDataToDB);
 
 function sendDataToDB() {
-
+console.log("selectedIndex",document.getElementById('select-event-place').selectedIndex);
     let newEvent = {};
     newEvent.title = document.getElementById('txt-event-title').value;
     newEvent.current_user = document.getElementById('txt-event-user').value;
@@ -411,7 +422,11 @@ function sendDataToDB() {
     newEvent.manager_1 = parseInt(document.getElementById('select-manager-1').value);
     newEvent.manager_2 = parseInt(document.getElementById('select-manager-2').value);
     newEvent.location_city = parseInt(document.getElementById('select-event-city').value);
-    newEvent.location_place = parseInt(document.getElementById('select-event-place').value);
+
+if(parseInt(document.getElementById('select-event-place').selectedIndex) == 0) {
+    newEvent.location_place = 1;
+}else newEvent.location_place = parseInt(document.getElementById('select-event-place').value);
+    
     newEvent.client = parseInt(document.getElementById('select-event-client').value);
     newEvent.notes = document.getElementById('event-notes').value;
 
@@ -420,7 +435,7 @@ function sendDataToDB() {
     fetch(URL + '/events', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json',              
         },
         body: JSON.stringify(newEvent)
     })
@@ -483,7 +498,7 @@ function loadEventsTable(data) {
             row.appendChild(cell);
 
             cell = document.createElement("td");
-            cell.innerHTML = data[i].cal_name;
+            cell.innerHTML = data[i].warehouse;
             row.appendChild(cell);
 
             cell = document.createElement("td");
