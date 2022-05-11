@@ -147,7 +147,7 @@ function resetEventForm() {
     document.getElementById('select-manager-2').selectedIndex = -1;
     document.getElementById('select-event-city').selectedIndex = -1;
     document.getElementById('select-event-place').selectedIndex = -1;
-    document.getElementById('select-event-phase').selectedIndex = -1;
+    document.getElementById('select-event-client').selectedIndex = -1;
     document.getElementById('event-notes').value = "";
 }
 
@@ -259,23 +259,23 @@ function loadLocations() {
             // loadSelectSource(cities, selectEventCity);
             fillSelectLocation(cities, selectEventCity);
         })
-        .then(loadEventPhases)
+        .then(loadClients)
         .catch(error => {
             // enter your logic for when there is an error (ex. error toast)
             console.log(error)
         })
 }
 
-// GET Event phases as a data source for select input 
+// GET Clients as a data source for select input 
 //============================================================
 
-function loadEventPhases() {
+function loadClients() {
 
-    console.log("GET event phases: http://82.209.203.205:3070/phases");
+    console.log("GET clients: http://82.209.203.205:3070/clients");
 
-    let selectEventPhase = document.getElementById('select-event-phase');
+    let selectClient = document.getElementById('select-event-client');
 
-    fetch(URL + '/phases', {
+    fetch(URL + '/clients', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -283,8 +283,8 @@ function loadEventPhases() {
     })
         .then(res => res.json())
         .then(data => {
-            console.log("eventPhases:", data);
-            loadSelectSource(data, selectEventPhase);
+            console.log("Clients:", data);
+            loadSelectSource(data, selectClient);
         })
         .catch(error => {
             // enter your logic for when there is an error (ex. error toast)
@@ -362,27 +362,10 @@ document.getElementById('select-trans-dep').addEventListener('change', (e) => {
 function loadSelectSource(data, select) {
 
     select.innerHTML = "";
-    let empty_opt = document.createElement('option');
-    empty_opt.innerHTML = "";
-    empty_opt.value = 1;
-
-    select.appendChild(empty_opt);
-    switch (select.id) {
-        case 'select-city':
-            empty_opt.innerHTML = "Выбрать город";
-            select.appendChild(empty_opt);
-            break;
-
-        case 'select-status':
-            empty_opt.innerHTML = "Выбрать статус";
-            select.appendChild(empty_opt);
-            break;
-    }
-
+    
     for (let i = 0; i < data.length; i++) {
         let opt = document.createElement('option');
         switch (select.id) {
-            case 'select-city':
             case 'select-trans-from':
             case 'select-trans-to':
                 opt.innerHTML = data[i].cal_name;
@@ -390,8 +373,11 @@ function loadSelectSource(data, select) {
             case 'select-status':
                 opt.innerHTML = data[i].status;
                 break;
-            case 'select-event-phase':
-                opt.innerHTML = data[i].phase;
+            case 'select-event-client':
+                opt.innerHTML = data[i].client;
+                break;
+            case 'select-city':
+                opt.innerHTML = data[i].warehouse;
                 break;
             case 'select-trans-dep':
             case 'select-trans-cat':
@@ -420,13 +406,13 @@ function sendDataToDB() {
     newEvent.current_user = document.getElementById('txt-event-user').value;
     newEvent.start = document.getElementById('date-event-start').value;
     newEvent.end = document.getElementById('date-event-end').value;
-    newEvent.city = parseInt(document.getElementById('select-city').value);
+    newEvent.warehouseId = parseInt(document.getElementById('select-city').value);
     newEvent.status = parseInt(document.getElementById('select-status').value);
     newEvent.manager_1 = parseInt(document.getElementById('select-manager-1').value);
     newEvent.manager_2 = parseInt(document.getElementById('select-manager-2').value);
     newEvent.location_city = parseInt(document.getElementById('select-event-city').value);
     newEvent.location_place = parseInt(document.getElementById('select-event-place').value);
-    newEvent.phase = parseInt(document.getElementById('select-event-phase').value);
+    newEvent.client = parseInt(document.getElementById('select-event-client').value);
     newEvent.notes = document.getElementById('event-notes').value;
 
     console.log("newEvent:", newEvent);
