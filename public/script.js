@@ -1,5 +1,5 @@
-const HOST = 'http://127.0.0.1';
-// const HOST = 'http://82.209.203.205';
+// const HOST = 'http://127.0.0.1';
+const HOST = 'http://82.209.203.205';
 const PORT = 3070;
 const URL = HOST + ':' + PORT;
 let USER;
