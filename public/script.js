@@ -593,10 +593,10 @@ function displaySelectedEventIntoForm(selectedEventId) {
     document.getElementById('txt-event-user').value = selectedEvent[0].current_user;
     document.getElementById('date-event-start').value = selectedEvent[0].start.slice(0, 10);
     document.getElementById('date-event-end').value = selectedEvent[0].end.slice(0, 10);
-    document.getElementById('select-city').selectedIndex = parseInt(selectedEvent[0].calendarId);
-    document.getElementById('select-status').selectedIndex = parseInt(selectedEvent[0].statusId);
-    document.getElementById('select-manager-1').selectedIndex = parseInt(selectedEvent[0].manager_1Id);
-    document.getElementById('select-manager-2').selectedIndex = parseInt(selectedEvent[0].manager_2Id);
+    document.getElementById('select-city').selectedIndex = parseInt(selectedEvent[0].calendarId) - 1;
+    document.getElementById('select-status').selectedIndex = parseInt(selectedEvent[0].statusId) - 1;
+    document.getElementById('select-manager-1').selectedIndex = parseInt(selectedEvent[0].manager_1Id) - 1;
+    document.getElementById('select-manager-2').selectedIndex = parseInt(selectedEvent[0].manager_2Id) - 1;
     document.getElementById('select-event-city').selectedIndex = parseInt(selectedEvent[0].event_cityId) - 1;
 
     let selectEventPlace = document.getElementById('select-event-place');
@@ -617,7 +617,7 @@ function displaySelectedEventIntoForm(selectedEventId) {
         }
     }
 
-    document.getElementById('select-event-phase').selectedIndex = parseInt(selectedEvent[0].phaseId);
+    document.getElementById('select-event-client').selectedIndex = parseInt(selectedEvent[0].clientId) - 1;
     document.getElementById('event-notes').value = selectedEvent[0].notes;
 }
 
