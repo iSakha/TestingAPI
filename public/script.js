@@ -1,7 +1,8 @@
 // const HOST = 'http://127.0.0.1';
-const HOST = 'http://82.209.203.205';
-const PORT = 3070;
-const URL = HOST + ':' + PORT;
+// const HOST = 'http://82.209.203.205';
+// const PORT = 3070;
+// const URL = HOST + ':' + PORT;
+const URL = 'http://back.aesthetic.by';
 let USER;
 let eventLocations = {};
 let events = {};
